@@ -2,10 +2,11 @@ const express = require("express");
 const bodyParser=require('body-parser');
 //const ejs=require("ejs");
 app = express();
-app.use(express.static('public')); 
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
 var data=[];
+var workData=[];
 app.get("/", function(req, res) {
 
 
@@ -23,8 +24,16 @@ app.get("/", function(req, res) {
 
 
 app.post('/',function(req,res){
+
+console.log(req.body);
+    if(req.body.button!="Work"){
     data.push(req.body.newEntry);
     res.redirect("/");
+  }
+  else {
+    workData.push(req.body.newEntry);
+    res.redirect('/work');
+  }
 
 
   /*const newToDo=req.body.newEntry;
@@ -33,7 +42,11 @@ app.post('/',function(req,res){
   list.appendChild(entry);
   res.send("Done"); */
 
-})
+});
+
+app.get('/work',function(req,res){
+res.render('list',{day:"Work List" ,newListItem:workData});
+});
 
 
 app.listen(3000,function(){
